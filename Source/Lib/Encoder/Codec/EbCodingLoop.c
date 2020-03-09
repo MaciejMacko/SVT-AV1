@@ -3314,38 +3314,6 @@ EB_EXTERN void av1_encode_pass(SequenceControlSet *scs_ptr, PictureControlSet *p
                                     ref_obj_1->reference_picture16bit : (EbPictureBufferDesc*)EB_NULL;
                             }
 #endif
-                            if (is_16bit)
-                            {
-                                warped_motion_prediction_16bit_pipeline(
-                                    pcs_ptr,
-                                    &context_ptr->mv_unit,
-                                    blk_ptr->prediction_unit_array[0].ref_frame_type,
-                                    blk_ptr->prediction_unit_array[0].compound_idx,
-                                    &blk_ptr->prediction_unit_array[0].interinter_comp,
-                                    context_ptr->blk_origin_x,
-                                    context_ptr->blk_origin_y,
-                                    blk_ptr,
-                                    blk_geom,
-#if WARP_IMPROVEMENT
-                                    ref_pic_list0,
-                                    ref_pic_list1,
-#else
-                                    is_16bit ? ref_obj_0->reference_picture16bit
-                                    : ref_obj_0->reference_picture,
-                                    ref_idx_l1 >= 0 ? is_16bit ? ref_obj_1->reference_picture16bit
-                                    : ref_obj_1->reference_picture
-                                    : NULL,
-#endif
-                                    recon_buffer,
-                                    context_ptr->blk_origin_x,
-                                    context_ptr->blk_origin_y,
-                                    &blk_ptr->prediction_unit_array[0].wm_params_l0,
-                                    &blk_ptr->prediction_unit_array[0].wm_params_l1,
-                                    (uint8_t)scs_ptr->static_config.encoder_bit_depth,
-                                    EB_TRUE);
-                            }
-                            else
-                            {
                                 warped_motion_prediction(
                                     pcs_ptr,
                                     &context_ptr->mv_unit,
@@ -3372,8 +3340,8 @@ EB_EXTERN void av1_encode_pass(SequenceControlSet *scs_ptr, PictureControlSet *p
                                     &blk_ptr->prediction_unit_array[0].wm_params_l0,
                                     &blk_ptr->prediction_unit_array[0].wm_params_l1,
                                     (uint8_t)scs_ptr->static_config.encoder_bit_depth,
+                                    EB_TRUE,
                                     EB_TRUE);
-                            }
                         }
 
                         if (pu_ptr->motion_mode != WARPED_CAUSAL) {
